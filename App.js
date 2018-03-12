@@ -22,12 +22,12 @@ export default class App extends React.Component {
     }
   }
 
-  // Retrieve the list of chart from Airtable
+  // Retrieve the list of chart songs from Airtable
     getChart() {
-      // Airtable API endpoint, replace with your own
+      // Airtable API endpoint
       let airtableUrl = "https://api.airtable.com/v0/apptNUHuZIre9Svn8/chart?&view=Grid%20view";
 
-      // Needed for Airtable authorization, replace with your own API key
+      // Needed for Airtable authorization
       let requestOptions = {
         headers: new Headers({
           'Authorization': 'Bearer keyILJwvK7To6PtTT'
@@ -49,7 +49,7 @@ export default class App extends React.Component {
     componentDidMount() {
       this.getChart(); // refresh the list when we're done
     }
-    // Upvote an idea
+    // Upvote a song
       upvoteChart(data, secId, rowId, rowMap) {
         // Slide the row back into place
         rowMap[`${secId}${rowId}`].props.closeRow();
@@ -61,7 +61,7 @@ export default class App extends React.Component {
         let requestOptions = {
           method: 'PATCH',
           headers: new Headers({
-            'Authorization': 'Bearer keyILJwvK7To6PtTT', // replace with your own API key
+            'Authorization': 'Bearer keyILJwvK7To6PtTT',
             'Content-type': 'application/json'
           }),
           body: JSON.stringify({
@@ -80,7 +80,7 @@ export default class App extends React.Component {
         });
       }
 
-      // Downvote an idea
+      // Downvote a song
       downvoteChart(data, secId, rowId, rowMap) {
         // Slide the row back into place
         rowMap[`${secId}${rowId}`].props.closeRow();
@@ -92,7 +92,7 @@ export default class App extends React.Component {
         let requestOptions = {
           method: 'PATCH',
           headers: new Headers({
-            'Authorization': 'Bearer keyILJwvK7To6PtTT', // replace with your own API key
+            'Authorization': 'Bearer keyILJwvK7To6PtTT',
             'Content-type': 'application/json'
           }),
           body: JSON.stringify({
@@ -111,50 +111,6 @@ export default class App extends React.Component {
         });
       }
 
-      // Ignore an idea
-      ignoreChart(data, secId, rowId, rowMap) {
-        // Slide the row back into place
-        rowMap[`${secId}${rowId}`].props.closeRow();
-
-        // Create a new array that has the idea removed
-        let newChartData = this.state.chart.slice();
-        newChartData.splice(rowId, 1);
-
-        // Set state
-        this.setState({
-          chart: newChartData
-        });
-      }
-
-      // Delete an idea
-      deleteChart(data, secId, rowId, rowMap) {
-        // Slide the row back into place
-        rowMap[`${secId}${rowId}`].props.closeRow();
-
-        // Create a new array that has the idea removed
-        let newChartData = this.state.chart.slice();
-        newChartData.splice(rowId, 1);
-
-        // Airtable API endpoint
-        let airtableUrl = "https://api.airtable.com/v0/apptNUHuZIre9Svn8/chart/" + data.id;
-
-        // Needed for Airtable authorization
-        let requestOptions = {
-          method: 'DELETE',
-          headers: new Headers({
-            'Authorization': 'Bearer keyILJwvK7To6PtTT', // replace with your own API key
-            'Content-type': 'application/json'
-          })
-        };
-
-        // Form the request
-        let request = new Request(airtableUrl, requestOptions);
-
-        // Make the request
-        fetch(request).then(response => response.json()).then(json => {
-          this.getChart(); // refresh the list when we're done
-        });
-      }
 
       // The UI for each row of data
       renderRow(data) {
